@@ -55,7 +55,7 @@ export class CrudComponent implements OnInit {
     );
   }  
 
-  addProduit(){
+  add(){
     const p = this.crudForm.value;
     this.service.add(p).subscribe(
       res => {

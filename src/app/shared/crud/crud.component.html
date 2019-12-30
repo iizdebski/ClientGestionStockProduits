@@ -51,7 +51,8 @@
                 (click)="operation == 'add' ? add() : update()">
                     {{ operation == 'add' ? 'Ajouter' : operation == 'edit' ? 'Modifier' : ''}}
                 </button>
-            </form> 
+              </form>
+    
 
         </div>                  
        <div *ngIf="operation == 'remove'">
