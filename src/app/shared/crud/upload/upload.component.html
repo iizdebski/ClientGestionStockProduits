@@ -1,6 +1,48 @@
 <input type="file" id="uploadFile" name="UploadFile" #fileUploadInput accept=".csv" (change)="selectFile($event)" />
 
-<div>
-    {{logObject | json }}
-
+<div class="checkout-wrap">
+  <ul class="checkout-bar">
+    <li [ngClass]="{active: currentStep == 1, visited: currentStep>1}" (click)="currentStep=1;">Importer un fichier</li>
+    <li [ngClass]="{active: currentStep == 2, visited: currentStep>2}" (click)="currentStep=2;">Envoyer</li>
+    <li [ngClass]="{active: currentStep == 3, visited: currentStep>3}" (click)="currentStep=3;">Recuperer les donnees</li>  
+  </ul>
     </div>
+
+    <div [ngSwitch]="currentStep">
+      <div *ngSwitchCase="1">
+        <div *ngIf="dataArray; else emptyData">
+          <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th *ngFor="let dataModel of dataModelListFiltred">{{dataModel.columnReference}}</th>            
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of dataArray">
+                  <td *ngFor="let dataModel of dataModelListFiltred">{{item[dataModel.columnName]}}</td>           
+                </tr>
+              </tbody>
+            </table>  
+          </div>             
+        <div *ngIf="!dataArray">
+          <p>Aucune donnee importee!</p>    
+          </div>     
+        </div>      
+        <div *ngSwitchCase="2"> 
+        <div *ngIf="!dataSentToServer">
+          <p>Cliquez pour envoyer les donnees au serveur !</p>
+          <button class="btn btn-default" (click)="dataSentToServer=true; currentStep = 3;">Send</button>          
+          </div>
+          <div *ngIf="dataSentToServer">
+            <p>L'envoie est termine.</p>           
+          </div>
+          </div>
+        <div *ngSwitchCase="3">
+          <div *ngIf="dataFromServer">
+            data from server ici
+        </div>
+        <div *ngIf="!dataFromServer">
+              <p>Aucune donnee recuperee!</p>
+             </div>
+          </div>
+      </div>  

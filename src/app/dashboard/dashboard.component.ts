@@ -71,6 +71,7 @@ export class DashboardComponent implements OnInit {
       datasetsUser.data.push(adminLength);
 
       let userLength = 0;
+
       list.forEach(user => user.roles.forEach(role => {
         if(role.name == 'ROLE_USER'){
         userLength++;
@@ -79,11 +80,7 @@ export class DashboardComponent implements OnInit {
 
       datasetsUser.data.push(userLength);
 
-    });
+    }
+  );  
   }
-
-
-
-
-
 }

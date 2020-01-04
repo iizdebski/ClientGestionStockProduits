@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { DataModel } from '../../data.model';
 
 @Component({
   selector: 'app-upload',
@@ -13,23 +14,63 @@ export class UploadComponent implements OnInit {
   @Input()
   dataModelList: DataModel[];
 
-  logObject: any;
+  dataArray: any = null;
 
-  bindArray: any;
+  currentStep = 1;
+
+  dataFromServer: any = null;
+
+  dataSentToServer: boolean = false;
+
+  dataModelListFiltred: any;
   
   constructor() { }
 
   ngOnInit() {
+    this.dataModelListFiltred  = this.dataModelList.filter(dataModel => !dataModel.readonly);
+    
   }
 
-  getbindHeadersDataModelListArray(headers){
+  getBindHeadersDataModelListArray(headers){
     let bindArray = [];
+    let index = 0;
+
+    let getDataType = (header) => {
+      let dataType = '';
+      this.dataModelList.forEach(dataModel => {
+        if(dataModel.columnName == header){
+          dataType = dataModel.dataType;
+        }
+      });
+      return dataType;
+    };
+
     headers.forEach(header => {
-
+      const bindItem = {
+        columnName: header,
+        dataType: getDataType(header),
+        index: index
+      }
+      index++;
+      bindArray.push(bindItem);
     });
+    return bindArray;
+  }
 
-    return headers;
+  buildDataArray(bindArray, csvRecordsArray){
+    let dataArray = [];
+    if(csvRecordsArray && csvRecordsArray.length>2){
+      for (let i = 1; i<csvRecordsArray.length; i++){        
+      const dataCsv = csvRecordsArray[i].split(";");
+      const dataCrud = {};
+      bindArray.forEach(bindItem => {
+      dataCrud[bindItem.columnName] = bindItem.dataType == 'number' ? Number(dataCsv[bindItem.index]) : dataCsv[bindItem.index];
+      });
 
+      dataArray.push(dataCrud);
+    }
+    }
+    return dataArray;
   }
 
   selectFile($event){
@@ -45,31 +86,14 @@ export class UploadComponent implements OnInit {
         let csvRecordsArray = csvData.split(/\r\n|\n/);   
         let headers = csvRecordsArray && csvRecordsArray.length>0 ? csvRecordsArray[0].split(";") : [];
         // bind headers with dataModelList 
-        let bindArray = this.getbindHeadersDataModelListArray(headers);
+        let bindArray = this.getBindHeadersDataModelListArray(headers);    
 
-        ['ref', 'quantite', 'prixunitaire']
-        [
-          {
-            columnName: 'ref', 
-            columnReference: 'Quantite',
-            dataType: 'text'
-          }
-        ]
+        // create data bindArray
 
-        [
+       this.dataArray = this.buildDataArray(bindArray, csvRecordsArray);
 
-        ]
-        {
-          
-        }
+       this.currentStep++;
 
-        [
-          new Produit(...),
-          ...
-        ]
-
-
-        this.logObject = bindArray;
         };
     }
   }
