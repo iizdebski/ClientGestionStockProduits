@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/finally';
 import { CookieService } from 'ngx-cookie-service';
 import { Store } from '@ngrx/store';
 
