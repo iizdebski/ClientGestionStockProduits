@@ -33,5 +33,9 @@ export class ProduitMockService implements CrudService{
 
   delete(id): Observable<any>{
     return of('success');
-  } 
+  }
+  
+  addAll(list): Observable<any>{
+    return of('success');
+  }
 } 

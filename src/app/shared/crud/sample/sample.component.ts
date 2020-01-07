@@ -21,7 +21,7 @@ export class SampleComponent implements OnInit {
   service: CrudService;
 
   @Input()
-  initItem: any;
+  initItem: any; 
 
   @Input()
   initForm: FormGroup;

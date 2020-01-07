@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, EventEmitter, Output } from '@angular/core';
 import { DataModel } from '../../data.model';
+import { CrudService } from '../../crud.service';
 
 @Component({
   selector: 'app-upload',
@@ -14,15 +15,25 @@ export class UploadComponent implements OnInit {
   @Input()
   dataModelList: DataModel[];
 
+  @Input()
+  service: CrudService;
+
+  @Output()
+  updateData: EventEmitter<any> = new EventEmitter<any>();
+
   dataArray: any = null;
 
   currentStep = 1;
+
+  selectedStep = 1;
 
   dataFromServer: any = null;
 
   dataSentToServer: boolean = false;
 
   dataModelListFiltred: any;
+
+  fileName: string = '';
   
   constructor() { }
 
@@ -77,6 +88,7 @@ export class UploadComponent implements OnInit {
     let fileList = $event.srcElement.files;
     let file = fileList[0];
     if(file && file.name.endsWith(".csv")){
+      this.fileName = file.name;
       let input = $event.target;
       let reader = new FileReader();    
       reader.readAsText(input.files[0]);
@@ -93,8 +105,17 @@ export class UploadComponent implements OnInit {
        this.dataArray = this.buildDataArray(bindArray, csvRecordsArray);
 
        this.currentStep++;
-
         };
     }
   }
+
+  sendDataToServer(){    
+    this.service.addAll(this.dataArray).subscribe((data)=>{
+      this.dataFromServer = data;
+      this.dataSentToServer=true;
+      this.updateData.emit(data);
+      this.currentStep = 3;
+    });
+  }  
 }
+

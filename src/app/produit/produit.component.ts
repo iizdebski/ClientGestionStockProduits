@@ -39,8 +39,4 @@ export class ProduitComponent implements OnInit{
       new DataModel('prixUnitaire','Prix Unitaire','number',false,[]),
     ]
   } 
-
-  
-  
-  
 }

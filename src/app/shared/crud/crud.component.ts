@@ -29,11 +29,15 @@ export class CrudComponent implements OnInit {
   @Input()
   dataModelList: DataModel[];
 
-  crudType = 'upload';
+  crudType = 'sample';
 
   constructor(){  
   }
 
   ngOnInit(){
   }  
-}
+
+  dataChanged($event){
+    this.data = this.data.concat($event);
+  }
+  }

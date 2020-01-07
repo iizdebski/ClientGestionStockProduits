@@ -28,4 +28,8 @@ export class UserService implements CrudService{
   delete(id): Observable<any>{
     return this.http.delete(API_URLS.USER_CRUD_URL + `/${id}`);
   } 
+
+  addAll(list): Observable<any>{
+    return this.http.post(API_URLS.USER_CRUD_URL + '/all', list);
+  }
 }

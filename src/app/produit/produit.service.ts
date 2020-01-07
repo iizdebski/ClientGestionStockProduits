@@ -28,4 +28,8 @@ export class ProduitService implements CrudService{
     delete(id): Observable<any>{
         return this.http.delete(API_URLS.PRODUITS_URL + `/${id}`);
     }   
+
+    addAll(list): Observable<any>{
+        return this.http.post(API_URLS.PRODUITS_URL + '/all', list);
+    }
 }
